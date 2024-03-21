@@ -126,6 +126,14 @@ namespace ReiwaSupportApplication
         {
             this.selectExcelRowIdx++;
             SetDisplayLabelValue();
+            this.dataGridView.DataSource = null;
+            this.TemplateTextBox.Text = string.Empty;
+
+            // サイトURLのリンクを開く
+            if (this.checkLinkAutoOpen.Checked)
+            {
+                OpenLinkUrl();
+            }
         }
 
 
@@ -150,6 +158,13 @@ namespace ReiwaSupportApplication
         }
 
         private void labelInquiryUrl_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            OpenLinkUrl();
+        }
+        /// <summary>
+        /// URLのリンクを開く
+        /// </summary>
+        private void OpenLinkUrl()
         {
             var url = labelInquiryUrl.Text;
             //ブラウザで開く

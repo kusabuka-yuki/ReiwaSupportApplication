@@ -58,6 +58,7 @@
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.labelInquiryUrl = new System.Windows.Forms.LinkLabel();
+            this.checkLinkAutoOpen = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.panel1.SuspendLayout();
@@ -361,11 +362,22 @@
             this.labelInquiryUrl.Text = "お問い合わせフォームURL";
             this.labelInquiryUrl.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labelInquiryUrl_LinkClicked);
             // 
+            // checkLinkAutoOpen
+            // 
+            this.checkLinkAutoOpen.AutoSize = true;
+            this.checkLinkAutoOpen.Location = new System.Drawing.Point(673, 492);
+            this.checkLinkAutoOpen.Name = "checkLinkAutoOpen";
+            this.checkLinkAutoOpen.Size = new System.Drawing.Size(96, 16);
+            this.checkLinkAutoOpen.TabIndex = 18;
+            this.checkLinkAutoOpen.Text = "リンク自動遷移";
+            this.checkLinkAutoOpen.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 582);
+            this.Controls.Add(this.checkLinkAutoOpen);
             this.Controls.Add(this.labelInquiryUrl);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.buttonNext);
@@ -426,6 +438,7 @@
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.LinkLabel labelInquiryUrl;
+        private System.Windows.Forms.CheckBox checkLinkAutoOpen;
     }
 }
 
