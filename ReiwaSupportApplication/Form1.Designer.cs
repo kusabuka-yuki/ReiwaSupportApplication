@@ -59,10 +59,15 @@
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
             this.labelInquiryUrl = new System.Windows.Forms.LinkLabel();
             this.checkLinkAutoOpen = new System.Windows.Forms.CheckBox();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.radioButtonContentType = new System.Windows.Forms.RadioButton();
+            this.radioButtonWithoutURL = new System.Windows.Forms.RadioButton();
+            this.radioButtonUnder500WithoutURL = new System.Windows.Forms.RadioButton();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -372,11 +377,55 @@
             this.checkLinkAutoOpen.Text = "リンク自動遷移";
             this.checkLinkAutoOpen.UseVisualStyleBackColor = true;
             // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.radioButtonUnder500WithoutURL);
+            this.panel2.Controls.Add(this.radioButtonWithoutURL);
+            this.panel2.Controls.Add(this.radioButtonContentType);
+            this.panel2.Location = new System.Drawing.Point(506, 142);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(262, 46);
+            this.panel2.TabIndex = 19;
+            // 
+            // radioButtonContentType
+            // 
+            this.radioButtonContentType.AutoSize = true;
+            this.radioButtonContentType.Location = new System.Drawing.Point(16, 19);
+            this.radioButtonContentType.Name = "radioButtonContentType";
+            this.radioButtonContentType.Size = new System.Drawing.Size(47, 16);
+            this.radioButtonContentType.TabIndex = 0;
+            this.radioButtonContentType.TabStop = true;
+            this.radioButtonContentType.Text = "通常";
+            this.radioButtonContentType.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonWithoutURL
+            // 
+            this.radioButtonWithoutURL.AutoSize = true;
+            this.radioButtonWithoutURL.Location = new System.Drawing.Point(69, 19);
+            this.radioButtonWithoutURL.Name = "radioButtonWithoutURL";
+            this.radioButtonWithoutURL.Size = new System.Drawing.Size(64, 16);
+            this.radioButtonWithoutURL.TabIndex = 0;
+            this.radioButtonWithoutURL.TabStop = true;
+            this.radioButtonWithoutURL.Text = "URLなし";
+            this.radioButtonWithoutURL.UseVisualStyleBackColor = true;
+            // 
+            // radioButtonUnder500WithoutURL
+            // 
+            this.radioButtonUnder500WithoutURL.AutoSize = true;
+            this.radioButtonUnder500WithoutURL.Location = new System.Drawing.Point(139, 19);
+            this.radioButtonUnder500WithoutURL.Name = "radioButtonUnder500WithoutURL";
+            this.radioButtonUnder500WithoutURL.Size = new System.Drawing.Size(110, 16);
+            this.radioButtonUnder500WithoutURL.TabIndex = 0;
+            this.radioButtonUnder500WithoutURL.TabStop = true;
+            this.radioButtonUnder500WithoutURL.Text = "500以下 URLなし";
+            this.radioButtonUnder500WithoutURL.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 582);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.checkLinkAutoOpen);
             this.Controls.Add(this.labelInquiryUrl);
             this.Controls.Add(this.groupBox2);
@@ -401,6 +450,8 @@
             this.panel1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -439,6 +490,10 @@
         private System.Windows.Forms.RichTextBox richTextBox2;
         private System.Windows.Forms.LinkLabel labelInquiryUrl;
         private System.Windows.Forms.CheckBox checkLinkAutoOpen;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.RadioButton radioButtonUnder500WithoutURL;
+        private System.Windows.Forms.RadioButton radioButtonWithoutURL;
+        private System.Windows.Forms.RadioButton radioButtonContentType;
     }
 }
 

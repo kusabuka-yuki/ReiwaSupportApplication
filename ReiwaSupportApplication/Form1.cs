@@ -33,14 +33,18 @@ namespace ReiwaSupportApplication
         }
         private void Form1_Load(object sender, EventArgs e)
         {
-            SetDisplayLabelValue();
+            SetDisplayValue();
         }
-        private void SetDisplayLabelValue()
+        private void SetDisplayValue()
         {
             GetSupplyExcelData();
             this.labelExcelRowIdx.Text = (this.selectExcelRowIdx + 1) .ToString();
             this.labelInquiryUrl.Text = this.supplyUrl.ToString();
             this.labelSupplyName.Text = this.supplyName.ToString();
+            this.radioButtonContentType.Checked = true;
+            this.radioButtonWithoutURL.Checked = false;
+            this.radioButtonUnder500WithoutURL.Checked = false;
+
         }
         private string GetFileName()
         {
@@ -55,9 +59,9 @@ namespace ReiwaSupportApplication
         /// xmlを読み込む
         /// </summary>
         /// <param name="occupation"></param>
-        private OccupationExcelData GetOccupationExcelData(Occupation occupation)
+        private OccupationExcelData GetOccupationExcelData(EOccupation occupation, EContentType contentType)
         {
-            OccupationExcelData excelData = new OccupationExcelData(occupation);
+            OccupationExcelData excelData = new OccupationExcelData(occupation, contentType);
             return excelData;
         }
         /// <summary>
@@ -81,8 +85,9 @@ namespace ReiwaSupportApplication
         {
             // ラジオボタンの読込み
             var occupation = GetCheckedOccupRadioButton();
+            var contentType = GetContentType();
             // xmlの読込み
-            var excelData = GetOccupationExcelData(occupation);
+            var excelData = GetOccupationExcelData(occupation, contentType);
             // 取引先を渡す
             excelData.Supply = this.supplyName;
             SetDataGridView(excelData);
@@ -90,31 +95,45 @@ namespace ReiwaSupportApplication
             // 定型文を出力する
             this.TemplateTextBox.Text = excelData.Content;
         }
-        private Occupation GetCheckedOccupRadioButton()
+        private EOccupation GetCheckedOccupRadioButton()
         {
-            Occupation occupation = Occupation.None;
+            EOccupation occupation = EOccupation.None;
 
             if (radioOccupConstruction.Checked)
             {
-                occupation = Occupation.Construction;
+                occupation = EOccupation.Construction;
             }
             else if (radioOccupManufacturing.Checked)
             {
-                occupation = Occupation.Manufacturing;
+                occupation = EOccupation.Manufacturing;
             }
             else if (radioOccupTransportation.Checked)
             {
-                occupation = Occupation.Transportation;
+                occupation = EOccupation.Transportation;
             }
             else if (radioOccupPassenger.Checked)
             {
-                occupation = Occupation.Passenger;
+                occupation = EOccupation.Passenger;
             }
             else if (radioOccupEtc.Checked)
             {
-                occupation = Occupation.Etc;
+                occupation = EOccupation.Etc;
             }
             return occupation;
+        }
+        private EContentType GetContentType()
+        {
+            var contentType = EContentType.Content;
+
+            if (radioButtonWithoutURL.Checked)
+            {
+                contentType = EContentType.ContentWithoutURL;
+            }
+            else if (radioButtonUnder500WithoutURL.Checked)
+            {
+                contentType = EContentType.ContentUnder500WithoutURL;
+            }
+            return contentType;
         }
         private void SetDataGridView(OccupationExcelData excelData)
         {
@@ -125,7 +144,7 @@ namespace ReiwaSupportApplication
         private void buttonNext_Click(object sender, EventArgs e)
         {
             this.selectExcelRowIdx++;
-            SetDisplayLabelValue();
+            SetDisplayValue();
             this.dataGridView.DataSource = null;
             this.TemplateTextBox.Text = string.Empty;
 
@@ -153,7 +172,7 @@ namespace ReiwaSupportApplication
                 }
                 this.selectExcelRowIdx = rowIdx;
 
-                SetDisplayLabelValue();
+                SetDisplayValue();
             }
         }
 

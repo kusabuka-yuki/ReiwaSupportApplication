@@ -35,8 +35,9 @@ namespace ReiwaSupportApplication
             }
         }
         public string Supply { get; set; }
+        public EContentType ContentType { get; set; } = EContentType.Content;
 
-        public enum Occupation
+        public enum EOccupation
         {
             Manufacturing,
             Construction,
@@ -45,15 +46,22 @@ namespace ReiwaSupportApplication
             Etc,
             None
         }
-        public OccupationExcelData(Occupation occupation) 
+        public enum EContentType
         {
+            Content,
+            ContentWithoutURL,
+            ContentUnder500WithoutURL
+        }
+        public OccupationExcelData(EOccupation occupation, EContentType contentType) 
+        {
+            this.ContentType = contentType;
             ReadExcelData(occupation);
         }
         internal OccupationExcelData()
         {
 
         }
-        private void ReadExcelData(Occupation occupation)
+        private void ReadExcelData(EOccupation occupation)
         {
             //xmlファイルを指定する
             XElement xml = XElement.Load(@"./drs.xml");
@@ -80,7 +88,8 @@ namespace ReiwaSupportApplication
             this.PostalCode = occupInfo.Element("PostalCode").Value;
             this.Address = occupInfo.Element("Address").Value;
             this.Subject = occupInfo.Element("Subject").Value;
-            this.Content = occupInfo.Element("Content").Value.TrimStart('\n').Replace("\t", "");
+            var contentType = this.ContentType.ToString();
+            this.Content = occupInfo.Element(contentType).Value.TrimStart('\n').Replace("\t", "");
         }
     }
     internal class OccupationExcelDataList
