@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,11 +21,13 @@ namespace ReiwaSupportApplication
         private int selectExcelRowIdx = 2;
         private string supplyName = string.Empty;
         private string supplyUrl = string.Empty;
+        private EOccupation occupation = EOccupation.None;
 
         private enum SupplyColumn
         {
             SupplyName = 1,
-            InquiryUrl = 3
+            InquiryUrl = 3,
+            Occupation = 10,
         }
         public Form1()
         {
@@ -37,14 +40,14 @@ namespace ReiwaSupportApplication
         }
         private void SetDisplayValue()
         {
+            this.occupation = EOccupation.None;
             GetSupplyExcelData();
             this.labelExcelRowIdx.Text = (this.selectExcelRowIdx + 1) .ToString();
-            this.labelInquiryUrl.Text = this.supplyUrl.ToString();
-            this.labelSupplyName.Text = this.supplyName.ToString();
+            this.labelInquiryUrl.Text = this.supplyUrl;
+            this.labelSupplyName.Text = this.supplyName;
             this.radioButtonContentType.Checked = true;
             this.radioButtonWithoutURL.Checked = false;
             this.radioButtonUnder500WithoutURL.Checked = false;
-
         }
         private string GetFileName()
         {
@@ -75,6 +78,37 @@ namespace ReiwaSupportApplication
             var cell = sheet.GetRow(this.selectExcelRowIdx);
             this.supplyName =  cell.GetCell((int)SupplyColumn.SupplyName).StringCellValue;
             this.supplyUrl = cell.GetCell((int)SupplyColumn.InquiryUrl).StringCellValue;
+            if (cell.GetCell((int)SupplyColumn.Occupation) != null)
+            {
+                var occupationTypeName = cell.GetCell((int)SupplyColumn.Occupation).StringCellValue;
+                this.occupation = GetEOccupationByOcuupationTypeName(occupationTypeName);
+            }
+        }
+        private EOccupation GetEOccupationByOcuupationTypeName(string occupationTypeName)
+        {
+            var occupation = EOccupation.None;
+
+            if(occupationTypeName == "製造")
+            {
+                occupation = EOccupation.Manufacturing;
+            }
+            if (occupationTypeName == "建設")
+            {
+                occupation = EOccupation.Construction;
+            }
+            if (occupationTypeName == "運送")
+            {
+                occupation = EOccupation.Transportation;
+            }
+            if (occupationTypeName == "旅客")
+            {
+                occupation = EOccupation.Passenger;
+            }
+            if (occupationTypeName == "その他")
+            {
+                occupation = EOccupation.Etc;
+            }
+            return occupation;
         }
         /// <summary>
         /// 定型文の作成
@@ -84,7 +118,7 @@ namespace ReiwaSupportApplication
         private void buttonCreateTemplate_Click(object sender, EventArgs e)
         {
             // ラジオボタンの読込み
-            var occupation = GetCheckedOccupRadioButton();
+            //var occupation = GetCheckedOccupRadioButton();
             var contentType = GetContentType();
             // xmlの読込み
             var excelData = GetOccupationExcelData(occupation, contentType);
@@ -153,6 +187,23 @@ namespace ReiwaSupportApplication
             {
                 OpenLinkUrl();
             }
+            if (this.checkBoxEnableAuto.Checked)
+            {
+                CallTypedBrouserControll();
+            }
+        }
+        private void CallTypedBrouserControll()
+        {
+            var contentType = GetContentType();
+            // xmlの読込み
+            if(occupation == EOccupation.None)
+            {
+                MessageBox.Show($"職種が未設定です。\n {this.supplyUrl}", Text, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            } 
+            var excelData = GetOccupationExcelData(occupation, contentType);
+            var brouserContoroll = new TypingBrouserControll(excelData, new Url(this.supplyUrl));
+            brouserContoroll.TypedBrouserControll();
         }
 
 
@@ -185,9 +236,28 @@ namespace ReiwaSupportApplication
         /// </summary>
         private void OpenLinkUrl()
         {
-            var url = labelInquiryUrl.Text;
-            //ブラウザで開く
-            System.Diagnostics.Process.Start(url);
+            if (this.checkBoxEnableAuto.Checked)
+            {
+                CallTypedBrouserControll();
+            }
+            else
+            {
+                //ブラウザで開く
+                System.Diagnostics.Process.Start(this.supplyUrl);
+            }
+        }
+
+        private void checkBoxEnableAuto_CheckedChanged(object sender, EventArgs e)
+        {
+            if(checkBoxEnableAuto.Checked)
+            {
+                this.checkLinkAutoOpen.Checked = false;
+                this.checkLinkAutoOpen.Enabled = false;
+            }
+            else
+            {
+                this.checkLinkAutoOpen.Enabled = true;
+            }
         }
     }
 }

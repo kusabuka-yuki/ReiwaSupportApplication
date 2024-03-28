@@ -60,9 +60,10 @@
             this.labelInquiryUrl = new System.Windows.Forms.LinkLabel();
             this.checkLinkAutoOpen = new System.Windows.Forms.CheckBox();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.radioButtonContentType = new System.Windows.Forms.RadioButton();
-            this.radioButtonWithoutURL = new System.Windows.Forms.RadioButton();
             this.radioButtonUnder500WithoutURL = new System.Windows.Forms.RadioButton();
+            this.radioButtonWithoutURL = new System.Windows.Forms.RadioButton();
+            this.radioButtonContentType = new System.Windows.Forms.RadioButton();
+            this.checkBoxEnableAuto = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.panel1.SuspendLayout();
@@ -370,6 +371,7 @@
             // checkLinkAutoOpen
             // 
             this.checkLinkAutoOpen.AutoSize = true;
+            this.checkLinkAutoOpen.Enabled = false;
             this.checkLinkAutoOpen.Location = new System.Drawing.Point(673, 492);
             this.checkLinkAutoOpen.Name = "checkLinkAutoOpen";
             this.checkLinkAutoOpen.Size = new System.Drawing.Size(96, 16);
@@ -387,16 +389,16 @@
             this.panel2.Size = new System.Drawing.Size(262, 46);
             this.panel2.TabIndex = 19;
             // 
-            // radioButtonContentType
+            // radioButtonUnder500WithoutURL
             // 
-            this.radioButtonContentType.AutoSize = true;
-            this.radioButtonContentType.Location = new System.Drawing.Point(16, 19);
-            this.radioButtonContentType.Name = "radioButtonContentType";
-            this.radioButtonContentType.Size = new System.Drawing.Size(47, 16);
-            this.radioButtonContentType.TabIndex = 0;
-            this.radioButtonContentType.TabStop = true;
-            this.radioButtonContentType.Text = "通常";
-            this.radioButtonContentType.UseVisualStyleBackColor = true;
+            this.radioButtonUnder500WithoutURL.AutoSize = true;
+            this.radioButtonUnder500WithoutURL.Location = new System.Drawing.Point(139, 19);
+            this.radioButtonUnder500WithoutURL.Name = "radioButtonUnder500WithoutURL";
+            this.radioButtonUnder500WithoutURL.Size = new System.Drawing.Size(110, 16);
+            this.radioButtonUnder500WithoutURL.TabIndex = 0;
+            this.radioButtonUnder500WithoutURL.TabStop = true;
+            this.radioButtonUnder500WithoutURL.Text = "500以下 URLなし";
+            this.radioButtonUnder500WithoutURL.UseVisualStyleBackColor = true;
             // 
             // radioButtonWithoutURL
             // 
@@ -409,22 +411,36 @@
             this.radioButtonWithoutURL.Text = "URLなし";
             this.radioButtonWithoutURL.UseVisualStyleBackColor = true;
             // 
-            // radioButtonUnder500WithoutURL
+            // radioButtonContentType
             // 
-            this.radioButtonUnder500WithoutURL.AutoSize = true;
-            this.radioButtonUnder500WithoutURL.Location = new System.Drawing.Point(139, 19);
-            this.radioButtonUnder500WithoutURL.Name = "radioButtonUnder500WithoutURL";
-            this.radioButtonUnder500WithoutURL.Size = new System.Drawing.Size(110, 16);
-            this.radioButtonUnder500WithoutURL.TabIndex = 0;
-            this.radioButtonUnder500WithoutURL.TabStop = true;
-            this.radioButtonUnder500WithoutURL.Text = "500以下 URLなし";
-            this.radioButtonUnder500WithoutURL.UseVisualStyleBackColor = true;
+            this.radioButtonContentType.AutoSize = true;
+            this.radioButtonContentType.Location = new System.Drawing.Point(16, 19);
+            this.radioButtonContentType.Name = "radioButtonContentType";
+            this.radioButtonContentType.Size = new System.Drawing.Size(47, 16);
+            this.radioButtonContentType.TabIndex = 0;
+            this.radioButtonContentType.TabStop = true;
+            this.radioButtonContentType.Text = "通常";
+            this.radioButtonContentType.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxEnableAuto
+            // 
+            this.checkBoxEnableAuto.AutoSize = true;
+            this.checkBoxEnableAuto.Checked = true;
+            this.checkBoxEnableAuto.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxEnableAuto.Location = new System.Drawing.Point(506, 105);
+            this.checkBoxEnableAuto.Name = "checkBoxEnableAuto";
+            this.checkBoxEnableAuto.Size = new System.Drawing.Size(133, 16);
+            this.checkBoxEnableAuto.TabIndex = 20;
+            this.checkBoxEnableAuto.Text = "自動入力を有効にする";
+            this.checkBoxEnableAuto.UseVisualStyleBackColor = true;
+            this.checkBoxEnableAuto.CheckedChanged += new System.EventHandler(this.checkBoxEnableAuto_CheckedChanged);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 582);
+            this.Controls.Add(this.checkBoxEnableAuto);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.checkLinkAutoOpen);
             this.Controls.Add(this.labelInquiryUrl);
@@ -494,6 +510,7 @@
         private System.Windows.Forms.RadioButton radioButtonUnder500WithoutURL;
         private System.Windows.Forms.RadioButton radioButtonWithoutURL;
         private System.Windows.Forms.RadioButton radioButtonContentType;
+        private System.Windows.Forms.CheckBox checkBoxEnableAuto;
     }
 }
 
