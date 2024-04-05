@@ -64,11 +64,16 @@
             this.radioButtonWithoutURL = new System.Windows.Forms.RadioButton();
             this.radioButtonContentType = new System.Windows.Forms.RadioButton();
             this.checkBoxEnableAuto = new System.Windows.Forms.CheckBox();
+            this.buttonXpathRegistForm = new System.Windows.Forms.Button();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.buttonOccupationForm = new System.Windows.Forms.Button();
+            this.buttonMasterSettingForm = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.panel1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.panel3.SuspendLayout();
             this.SuspendLayout();
             // 
             // label1
@@ -435,11 +440,55 @@
             this.checkBoxEnableAuto.UseVisualStyleBackColor = true;
             this.checkBoxEnableAuto.CheckedChanged += new System.EventHandler(this.checkBoxEnableAuto_CheckedChanged);
             // 
+            // buttonXpathRegistForm
+            // 
+            this.buttonXpathRegistForm.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.buttonXpathRegistForm.Location = new System.Drawing.Point(51, 13);
+            this.buttonXpathRegistForm.Name = "buttonXpathRegistForm";
+            this.buttonXpathRegistForm.Size = new System.Drawing.Size(117, 23);
+            this.buttonXpathRegistForm.TabIndex = 21;
+            this.buttonXpathRegistForm.Text = "XPath登録画面表示";
+            this.buttonXpathRegistForm.UseVisualStyleBackColor = false;
+            this.buttonXpathRegistForm.Click += new System.EventHandler(this.buttonXpathRegistForm_Click);
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.buttonOccupationForm);
+            this.panel3.Controls.Add(this.buttonMasterSettingForm);
+            this.panel3.Controls.Add(this.buttonXpathRegistForm);
+            this.panel3.Location = new System.Drawing.Point(375, 21);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(393, 76);
+            this.panel3.TabIndex = 22;
+            // 
+            // buttonOccupationForm
+            // 
+            this.buttonOccupationForm.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.buttonOccupationForm.Location = new System.Drawing.Point(51, 42);
+            this.buttonOccupationForm.Name = "buttonOccupationForm";
+            this.buttonOccupationForm.Size = new System.Drawing.Size(117, 23);
+            this.buttonOccupationForm.TabIndex = 21;
+            this.buttonOccupationForm.Text = "職種入力画面表示";
+            this.buttonOccupationForm.UseVisualStyleBackColor = false;
+            this.buttonOccupationForm.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // buttonMasterSettingForm
+            // 
+            this.buttonMasterSettingForm.BackColor = System.Drawing.SystemColors.ActiveCaption;
+            this.buttonMasterSettingForm.Location = new System.Drawing.Point(200, 13);
+            this.buttonMasterSettingForm.Name = "buttonMasterSettingForm";
+            this.buttonMasterSettingForm.Size = new System.Drawing.Size(117, 23);
+            this.buttonMasterSettingForm.TabIndex = 21;
+            this.buttonMasterSettingForm.Text = "マスタ設定画面表示";
+            this.buttonMasterSettingForm.UseVisualStyleBackColor = false;
+            this.buttonMasterSettingForm.Click += new System.EventHandler(this.button2_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 582);
+            this.Controls.Add(this.panel3);
             this.Controls.Add(this.checkBoxEnableAuto);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.checkLinkAutoOpen);
@@ -457,7 +506,7 @@
             this.Controls.Add(this.labelExcelRowIdx);
             this.Controls.Add(this.label1);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "作業画面";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
@@ -468,6 +517,7 @@
             this.groupBox2.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.panel3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -511,6 +561,10 @@
         private System.Windows.Forms.RadioButton radioButtonWithoutURL;
         private System.Windows.Forms.RadioButton radioButtonContentType;
         private System.Windows.Forms.CheckBox checkBoxEnableAuto;
+        private System.Windows.Forms.Button buttonXpathRegistForm;
+        private System.Windows.Forms.Panel panel3;
+        private System.Windows.Forms.Button buttonOccupationForm;
+        private System.Windows.Forms.Button buttonMasterSettingForm;
     }
 }
 

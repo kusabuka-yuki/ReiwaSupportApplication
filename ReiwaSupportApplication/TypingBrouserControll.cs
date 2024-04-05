@@ -1,12 +1,19 @@
-﻿using NPOI.SS.Formula.PTG;
+﻿using EnumsNET;
+using NPOI.SS.Formula.PTG;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.DevTools.V120.Page;
+using OpenQA.Selenium.Support.UI;
+using Org.BouncyCastle.Asn1.X509.Qualified;
+using Org.BouncyCastle.Tls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Http.Headers;
 using System.Security.Policy;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ReiwaSupportApplication
@@ -14,15 +21,36 @@ namespace ReiwaSupportApplication
     internal class TypingBrouserControll
     {
         private ChromeDriver driver;
+        private XPathData xPathData;
 
         internal OccupationExcelData OccupationExcelData { get; private set; }
         internal Url Url { get; private set; }
+        internal Dictionary<string, ReadOnlyCollection<IWebElement>> XPathElements;
+        internal Dictionary<string, string> MatchedXPath = new Dictionary<string, string>();
 
         internal TypingBrouserControll(OccupationExcelData occupationExcelData, Url url) 
         { 
             this.OccupationExcelData = occupationExcelData;
             this.Url= url;
         }
+        internal enum ETargetControll
+        {
+            company = 0,
+            name,
+            nameKana,
+            nameKata,
+            address,
+            post,
+            tel,
+            fax,
+            email,
+            confirmEmail,
+            subtitle,
+            content,
+            checkBoxPrivacy,
+            submitButton,
+        }
+
         internal void TypedBrouserControll()
         {
             try
@@ -33,180 +61,102 @@ namespace ReiwaSupportApplication
                 // サイトを表示する
                 driver.Navigate().GoToUrl(Url.Value);
 
-                // コントロールの取得
-                var companyXpaths = new List<string>()
-                {
-                    "//p[contains(text(), '会社名')]/parent::dt/parent::dl//input",
-                    "//input[@name='会社名']",
-                    "//input[@name='yourcompany']",
-                    "//input[@name='company']",
-                    "//input[@name='companyname']",
-                    "//span[contains(text(), '会社名')]/parent::label/parent::li//input",
-                };
-                var nameXpths = new List<string>()
-                {
-                    "//label[contains(text(), '名前')]/parent::div/parent::div//input",
-                    "//th[contains(text(), '名前')]/parent::tr//input",
-                    "//label[contains(text(), '名前')]//input",
-                    "//div[contains(text(), '名前')]/parent::td/parent::tr//input",
-                    "//input[@name='お名前']",
-                    "//p[contains(text(), '名前')]/parent::th/parent::tr//input",
-                    "//input[@name='name']",
-                    "//input[@name='your-name']",
-                    "//input[@name='username']",
-                    "//div[contains(text(), '名前')]/parent::div//input",
-                    "//dt[contains(text(), '名前')]/parent::dl//input",
-                    "//span[contains(text(), '名前')]/parent::label/parent::li//input",
-                };
-                var nameKanaXpaths = new List<string>()
-                {
-                    "//th[contains(text(), 'ふりがな')]/parent::tr//input",
-                    "//dt[contains(text(), 'ふりがな')]/parent::dl//input",
-                    "//input[@name='kana']",
-                    "//input[@name='furigana']",
-                    "//input[@name='kana-name']",
-                    "//input[@name='userkana']",
-                };
-                var nameKataXpaths = new List<string>()
-                {
-                    "//p[contains(text(), 'ガナ')]/parent::dt/parent::dl//input",
-                    "//div[contains(text(), 'ガナ')]/parent::td/parent::tr//input",
-                    "//div[contains(text(), 'ガナ')]/parent::div//input",
-                    "//dt[contains(text(), 'ガナ')]/parent::dl//input"
-                };
-                var addressXpths = new List<string>()
-                {
-                    "//th[contains(text(), '住所')]/parent::tr//input",
-                    "//label[contains(text(), '住所')]/parent::div/parent::div//input",
-                    "//p[contains(text(), '住所')]/parent::th/parent::tr//input",
-                    "//input[@name='address']",
-                    "//input[@name='addr']",
-                    "//input[@name='jyusho']",
-                    "//input[@name='useraddress2']",
-                    "//span[contains(text(), '住所')]/parent::label/parent::li//input",
-                };
-                var postXpths = new List<string>()
-                {
-                    "//label[contains(text(), '郵便')]/parent::div/parent::div//input",
-                    "//th[contains(text(), '郵便')]/parent::tr//input",
-                    "//input[contains(@placeholder, '〒')]",
-                    "//p[contains(text(), '郵便')]/parent::th/parent::tr//input",
-                    "//input[@name='youbin']",
-                    "//dt[contains(text(), '郵便')]/parent::dl//input",
-                    "//span[contains(text(), '郵便')]/parent::label/parent::li//input",
-                };
-                var telXpath = new List<string>()
-                {
-                    "//input[@type='tel']",
-                    "//th[contains(text(), '電話')]/parent::tr//input",
-                    "//p[contains(text(), '電話')]/parent::dt/parent::dl//input",
-                    "//div[contains(text(), '電話')]/parent::td/parent::tr//input",
-                    "//input[@name='phone']",
-                    "//input[@name='tel']",
-                    "//input[@name='usertel']",
-                    "//div[contains(text(), '電話')]/parent::div//input",
-                    "//dt[contains(text(), '電話')]/parent::dl//input",
-                    "//span[contains(text(), '電話')]/parent::label/parent::li//input",
+                ReadXPathSetting();
+                SetXPathElements();
+                IndexedXPathElements();
 
-                };
-                var faxXpath = new List<string>()
-                {
-                    "//input[@type='fax']",
-                    "//th[contains(text(), 'FAX')]/parent::tr//input",
-                    "//p[contains(text(), 'FAX')]/parent::dt/parent::dl//input",
-                    "//div[contains(text(), 'FAX')]/parent::td/parent::tr//input",
-                    "//input[@name='fax']",
-                    "//dt[contains(text(), 'FAX')]/parent::dl//input",
-                };
-                var emailXpaths = new List<string>()
-                {
-                    "//input[@type='email']",
-                    "//th[contains(text(), 'メールアドレス')]/parent::tr//input",
-                    "//div[contains(text(), 'メールアドレス')]/parent::td/parent::tr//input",
-                    "//input[@name='メールアドレス']",
-                    "//input[@name='email']",
-                    "//input[@name='email1']",
-                    "//input[@name='yourmail']",
-                    "//input[@name='usermail']",
-                    "//span[contains(text(), 'メール')]/parent::label/parent::li//input",
-                };
-                var confirmEmailXpaths = new List<string>()
-                {
-                    "//th[contains(text(), '確認')]/parent::tr//input",
-                    "//div[contains(text(), '確認')]/parent::td/parent::tr//input",
-                    "//input[@name='確認']",
-                };
-                var subtitleXpaths = new List<string>()
-                {
-                    "//input[@name='your-subject']",
-                    "//label[contains(text(), '件名')]/parent::div//input",
-                };
-                var textBoxCompanyElements = GetElements(companyXpaths);
-                var textBoxNameElements = GetElements(nameXpths);
-                var textBoxNameKanaElements = GetElements(nameKanaXpaths);
-                var textBoxNameKataElements = GetElements(nameKataXpaths);
-                var textBoxPostElements = GetElements(postXpths);
-                var textBoxAddressElements = GetElements(addressXpths);
-                var textBoxTelElements = GetElements(telXpath);
-                var textBoxfaxElements = GetElements(faxXpath);
-                var textBoxEmailElements = GetElements(emailXpaths);
-                var textBoxConfirmEmailElements = GetElements(confirmEmailXpaths);
-                var textBoxSubtitleElements = GetElements(subtitleXpaths);
-                var textBoxContentElements = driver.FindElements(By.TagName("textarea"));
+                if (XPathElements.Count <= 0 || XPathElements.Values.Count <= 0) { return; }
 
-                // 値を入力
-                if (textBoxCompanyElements.Count > 0)
+                foreach(var element in XPathElements)
                 {
-                    textBoxCompanyElements.First().Clear();
-                    textBoxCompanyElements.First().SendKeys(this.OccupationExcelData.CompanyName);
-                }
-                if (textBoxNameElements.Count > 0)
-                {
-                    textBoxNameElements.First().SendKeys(this.OccupationExcelData.FullNameKanji);
-                }
-                if (textBoxNameKanaElements.Count > 0)
-                {
-                    textBoxNameKanaElements.First().SendKeys(this.OccupationExcelData.FullNameHiragana);
-                }
-                if (textBoxNameKataElements.Count > 0)
-                {
-                    textBoxNameKataElements.First().SendKeys(this.OccupationExcelData.FullNameKana);
-                }
-                if (textBoxPostElements.Count > 0)
-                {
-                    textBoxPostElements.First().SendKeys(this.OccupationExcelData.PostalCode);
-                }
-                if (textBoxTelElements.Count > 0)
-                {
-                    textBoxTelElements.First().SendKeys(this.OccupationExcelData.PhoneNumber);
-                }
-                if (textBoxfaxElements.Count > 0)
-                {
-                    textBoxfaxElements.First().SendKeys(this.OccupationExcelData.FaxNumber);
-                }
-                if (textBoxEmailElements.Count > 0)
-                {
-                    textBoxEmailElements.First().SendKeys(this.OccupationExcelData.EmailAddress);
-                }
-                if (textBoxConfirmEmailElements.Count > 0)
-                {
-                    textBoxConfirmEmailElements.First().SendKeys(this.OccupationExcelData.EmailAddress);
-                }
-                if (textBoxAddressElements.Count > 0)
-                {
-                    // 住所は自動入力されることがあるからクリアする
-                    textBoxAddressElements.First().Clear();
-                    textBoxAddressElements.First().SendKeys(this.OccupationExcelData.Address);
-                }
-                if (textBoxSubtitleElements.Count > 0)
-                {
-                    textBoxSubtitleElements.First().SendKeys(this.OccupationExcelData.Subject);
-                }
-                if (textBoxContentElements.Count > 0)
-                {
-                    textBoxContentElements.First().SendKeys(this.OccupationExcelData.Content);
-                }
+                    if(element.Value.Count <= 0) { continue; }
+                    var targetElement = element.Value.First();
+                    var valueClear = false;
+                    var elementClick = false;
+                    var sendKey = string.Empty;
+                    var jsMode = true;
 
+                    if (element.Key == ETargetControll.company.ToString())
+                    {
+                        valueClear = true;
+                        sendKey = this.OccupationExcelData.CompanyName;
+                    }
+                    if (element.Key == ETargetControll.name.ToString())
+                    {
+                        sendKey = this.OccupationExcelData.FullNameKanji;
+                    }
+                    if (element.Key == ETargetControll.nameKana.ToString())
+                    {
+                        sendKey = this.OccupationExcelData.FullNameHiragana;
+                    }
+                    if (element.Key == ETargetControll.nameKata.ToString())
+                    {
+                        sendKey = this.OccupationExcelData.FullNameKata;
+                    }
+                    if (element.Key == ETargetControll.address.ToString())
+                    {
+                        valueClear = true;
+                        sendKey = this.OccupationExcelData.Address;
+                    }
+                    if (element.Key == ETargetControll.post.ToString())
+                    {
+                        sendKey = this.OccupationExcelData.PostalCode;
+                    }
+                    if (element.Key == ETargetControll.tel.ToString())
+                    {
+                        sendKey = this.OccupationExcelData.PhoneNumber;
+                    }
+                    if (element.Key == ETargetControll.fax.ToString())
+                    {
+                        sendKey = this.OccupationExcelData.FaxNumber;
+                    }
+                    if (element.Key == ETargetControll.email.ToString())
+                    {
+                        sendKey = this.OccupationExcelData.EmailAddress;
+                    }
+                    if (element.Key == ETargetControll.confirmEmail.ToString())
+                    {
+                        sendKey = this.OccupationExcelData.EmailAddress;
+                    }
+                    if (element.Key == ETargetControll.subtitle.ToString())
+                    {
+                        sendKey = this.OccupationExcelData.Subtitle;
+                    }
+                    if (element.Key == ETargetControll.content.ToString())
+                    {
+                        sendKey = this.OccupationExcelData.Content;
+                        //jsMode = true;
+                    }
+                    if (element.Key == ETargetControll.checkBoxPrivacy.ToString())
+                    {
+                        elementClick = true;
+                    }
+                    if (element.Key == ETargetControll.submitButton.ToString())
+                    {
+                        elementClick = true;
+                    }
+
+                    if (valueClear)
+                    {
+                        targetElement.Clear();
+                    }
+
+                    if (jsMode)
+                    {
+                        var xPath = MatchedXPath.Where(x=>x.Key == element.Key).First();
+                        var script = $"document.evaluate(\"{xPath.Value}\", document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue.value=arguments[0]";
+                        ((IJavaScriptExecutor)driver).ExecuteScript(script, sendKey);
+                    }
+                    else
+                    {
+                        targetElement.SendKeys(sendKey);
+                    }
+
+                    if (elementClick)
+                    {
+                        targetElement.Click();
+                    }
+                }
                 // 編集したいのでブラウザは閉じない
                 //driver.Quit();
             }
@@ -221,12 +171,77 @@ namespace ReiwaSupportApplication
             foreach (var xpath in xpthList)
             {
                 elements = driver.FindElements(By.XPath(xpath));
-                if (elements.Count > 0)
+                if (elements.Count <= 0)
+                {
+                    continue;
+                }
+                else
                 {
                     break;
                 }
             }
             return elements;
+        }
+        private ReadOnlyCollection<IWebElement> GetElements(List<string> xPathList, out string matchedXPath)
+        {
+            ReadOnlyCollection<IWebElement> elements = null;
+            var matchXPath = string.Empty;
+            foreach (var xpath in xPathList)
+            {
+                elements = driver.FindElements(By.XPath(xpath));
+                if (elements.Count <= 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    matchXPath = xpath;
+                    break;
+                }
+            }
+            matchedXPath = matchXPath;
+            return elements;
+        }
+        private void ReadXPathSetting()
+        {
+            var xpathInfo = new XPathInfo();
+            xpathInfo.ReadXPathJson();
+            xPathData = xpathInfo.GetXPathData();
+        }
+        private void SetXPathElements()
+        {
+            var xPathElements = new Dictionary<string, ReadOnlyCollection<IWebElement>>();
+            var distinctJsonItemList = xPathData.XPathJsonItem.Select(x => x.ItemName).Distinct().ToList();
+
+            foreach (var jsonItem in distinctJsonItemList)
+            {
+                var nameItem = xPathData.XPathJsonItem.Where(x => x.ItemName == jsonItem);
+                var xpathList = nameItem.Select(x => x.XPath).ToList();
+                var webElements = GetElements(xpathList, out string matchedXPath);
+                var itemName = nameItem.FirstOrDefault().ItemName;
+                MatchedXPath.Add(itemName, matchedXPath);
+                xPathElements.Add(itemName, webElements);
+            }
+            XPathElements = xPathElements;
+        }
+        private void IndexedXPathElements()
+        {
+            // シーケンス番号はETargetControllに合わせる
+            var indexedXPathElements = new Dictionary<string, ReadOnlyCollection<IWebElement>>();
+            var indexList = new List<string>();
+
+            var valList = Enum.GetValues(typeof(ETargetControll)).OfType<ETargetControll>();
+            foreach (var val in valList)
+            {
+                indexList.Insert((int)val, val.ToString());
+            }
+            foreach(var val in indexList)
+            {
+                var nameItem = XPathElements.Where(x => x.Key == val);
+                indexedXPathElements.Add(nameItem.First().Key, nameItem.First().Value);
+            }
+            // シーケンス番号順に挿入したDictionaryを作成して返す
+            XPathElements = indexedXPathElements;
         }
     }
 }

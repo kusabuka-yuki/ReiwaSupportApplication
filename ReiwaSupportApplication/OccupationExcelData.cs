@@ -14,7 +14,7 @@ namespace ReiwaSupportApplication
 
         public string CompanyName { get; set; }
         public string FullNameKanji { get; set; }
-        public string FullNameKana { get; set; }
+        public string FullNameKata { get; set; }
         public string FullNameHiragana { get; set; }
         public string PhoneNumber { get; set; }
         public string FaxNumber { get;set; }
@@ -23,7 +23,7 @@ namespace ReiwaSupportApplication
         public string ContactPersonDepartment { get; set; }
         public string PostalCode { get; set; }
         public string Address { get; set; }
-        public string Subject { get; set; }
+        public string Subtitle { get; set; }
         public string Content {
             get
             {
@@ -74,7 +74,7 @@ namespace ReiwaSupportApplication
             var info = infos.First();
             this.CompanyName = info.Element("CompanyName").Value;
             this.FullNameKanji = info.Element("FullNameKanji").Value;
-            this.FullNameKana = info.Element("FullNameKana").Value;
+            this.FullNameKata = info.Element("FullNameKana").Value;
             this.FullNameHiragana = info.Element("FullNameHiragana").Value;
             this.PhoneNumber = info.Element("PhoneNumber").Value;
             this.FaxNumber = info.Element("FaxNumber").Value;
@@ -87,7 +87,7 @@ namespace ReiwaSupportApplication
             this.ContactPersonAge = occupInfo.Element("ContactPersonAge").Value;
             this.PostalCode = occupInfo.Element("PostalCode").Value;
             this.Address = occupInfo.Element("Address").Value;
-            this.Subject = occupInfo.Element("Subject").Value;
+            this.Subtitle = occupInfo.Element("Subject").Value;
             var contentType = this.ContentType.ToString();
             this.Content = occupInfo.Element(contentType).Value.TrimStart('\n').Replace("\t", "");
         }
@@ -100,7 +100,7 @@ namespace ReiwaSupportApplication
             var dictionary = new Dictionary<string, string> {};
             dictionary.Add("会社名", excelData.CompanyName);
             dictionary.Add("氏名", excelData.FullNameKanji);
-            dictionary.Add("氏名(カナ)", excelData.FullNameKana);
+            dictionary.Add("氏名(カナ)", excelData.FullNameKata);
             dictionary.Add("部署", excelData.ContactPersonDepartment);
             dictionary.Add("携帯電話", excelData.PhoneNumber);
             dictionary.Add("FAX", excelData.FaxNumber);
@@ -108,7 +108,7 @@ namespace ReiwaSupportApplication
             dictionary.Add("年齢", excelData.ContactPersonAge);
             dictionary.Add("郵便", excelData.PostalCode);
             dictionary.Add("住所", excelData.Address);
-            dictionary.Add("件名", excelData.Subject);
+            dictionary.Add("件名", excelData.Subtitle);
             Data = dictionary;
         }
     }

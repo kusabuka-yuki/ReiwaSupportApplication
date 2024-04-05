@@ -1,10 +1,14 @@
-﻿using NPOI.SS.Formula.Functions;
+﻿using Newtonsoft.Json;
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,7 +59,8 @@ namespace ReiwaSupportApplication
             //string result = dt.ToString("yyyy_MM_dd");
 
             string result = string.Empty;
-            var fileName = @"G:\マイドライブ\ドライブ\クラウドワークス\Reiwa\【6周目】240226　全国　端数 2" + result +  ".xlsx";
+            //var fileName = @"G:\マイドライブ\ドライブ\クラウドワークス\Reiwa\【6周目】240226　全国　端数 2" + result +  ".xlsx";
+            var fileName = ConfigurationManager.AppSettings["SupplyExcelPath"];
             return fileName;
         }
         /// <summary>
@@ -202,6 +207,8 @@ namespace ReiwaSupportApplication
                 return;
             } 
             var excelData = GetOccupationExcelData(occupation, contentType);
+            // 取引先を渡す
+            excelData.Supply = this.supplyName;
             var brouserContoroll = new TypingBrouserControll(excelData, new Url(this.supplyUrl));
             brouserContoroll.TypedBrouserControll();
         }
@@ -258,6 +265,17 @@ namespace ReiwaSupportApplication
             {
                 this.checkLinkAutoOpen.Enabled = true;
             }
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonXpathRegistForm_Click(object sender, EventArgs e)
+        {
+            XPathInfo form = new XPathInfo();
+            form.Show();
         }
     }
 }
